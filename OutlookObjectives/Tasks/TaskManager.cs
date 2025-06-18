@@ -57,10 +57,10 @@
         {
             // Create task objects.
             taskImportData = new TaskImportData(TaskFinished);
-            taskDayReport = new TaskDayReport(TaskFinished);
-            taskWeekReport = new TaskWeekReport(TaskFinished);
-            taskMonthReport = new TaskMonthReport(TaskFinished);
-            taskConvertVersion = new TaskConvertVersion(TaskFinished);
+            //taskDayReport = new TaskDayReport(TaskFinished);
+            //taskWeekReport = new TaskWeekReport(TaskFinished);
+            //taskMonthReport = new TaskMonthReport(TaskFinished);
+            //taskConvertVersion = new TaskConvertVersion(TaskFinished);
             taskWebSync = new TaskWebSync(TaskFinished);
 
             // Configure and start a background thread.

@@ -434,10 +434,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>OutlookObjectives_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>OutlookObjectives_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D5FF995F47E04E13A56399FC62571757D339796F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>24D47DF4BAF2F6928010FBD0FC997ED32BA4A36C</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
     <DebugSymbols>true</DebugSymbols>
