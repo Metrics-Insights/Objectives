@@ -128,12 +128,6 @@
     <AndroidResource Include="Resources\drawable\icon_feed.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidObjectives\AndroidObjectives.csproj">
-      <Project>{844795B8-6CDF-4D23-9038-B65908F091C6}</Project>
-      <Name>AndroidObjectives</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\plus.png">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
