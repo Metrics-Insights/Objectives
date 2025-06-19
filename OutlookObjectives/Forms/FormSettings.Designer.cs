@@ -50,7 +50,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(156, 20);
+            this.label1.Size = new System.Drawing.Size(242, 31);
             this.label1.TabIndex = 0;
             this.label1.Text = "Objectives Folder Path";
             // 
@@ -58,9 +58,9 @@
             // 
             this.TextBoxObjectivesRootFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.TextBoxObjectivesRootFolder.ForeColor = System.Drawing.Color.White;
-            this.TextBoxObjectivesRootFolder.Location = new System.Drawing.Point(16, 32);
+            this.TextBoxObjectivesRootFolder.Location = new System.Drawing.Point(18, 43);
             this.TextBoxObjectivesRootFolder.Name = "TextBoxObjectivesRootFolder";
-            this.TextBoxObjectivesRootFolder.Size = new System.Drawing.Size(363, 27);
+            this.TextBoxObjectivesRootFolder.Size = new System.Drawing.Size(515, 37);
             this.TextBoxObjectivesRootFolder.TabIndex = 1;
             this.TextBoxObjectivesRootFolder.TabStop = false;
             this.TextBoxObjectivesRootFolder.TextChanged += new System.EventHandler(this.TextBoxObjectivesRootFolder_TextChanged);
@@ -68,7 +68,7 @@
             // ButtonObjectivesRootFolder
             // 
             this.ButtonObjectivesRootFolder.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ButtonObjectivesRootFolder.Location = new System.Drawing.Point(385, 32);
+            this.ButtonObjectivesRootFolder.Location = new System.Drawing.Point(539, 42);
             this.ButtonObjectivesRootFolder.Name = "ButtonObjectivesRootFolder";
             this.ButtonObjectivesRootFolder.Size = new System.Drawing.Size(27, 27);
             this.ButtonObjectivesRootFolder.TabIndex = 2;
@@ -79,9 +79,9 @@
             // ButtonOk
             // 
             this.ButtonOk.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ButtonOk.Location = new System.Drawing.Point(336, 238);
+            this.ButtonOk.Location = new System.Drawing.Point(490, 248);
             this.ButtonOk.Name = "ButtonOk";
-            this.ButtonOk.Size = new System.Drawing.Size(76, 29);
+            this.ButtonOk.Size = new System.Drawing.Size(76, 42);
             this.ButtonOk.TabIndex = 3;
             this.ButtonOk.Text = "Ok";
             this.ButtonOk.UseVisualStyleBackColor = true;
@@ -91,9 +91,9 @@
             // 
             this.LabelErrorObjectivesRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelErrorObjectivesRootFolder.ForeColor = System.Drawing.Color.Red;
-            this.LabelErrorObjectivesRootFolder.Location = new System.Drawing.Point(179, 9);
+            this.LabelErrorObjectivesRootFolder.Location = new System.Drawing.Point(260, 19);
             this.LabelErrorObjectivesRootFolder.Name = "LabelErrorObjectivesRootFolder";
-            this.LabelErrorObjectivesRootFolder.Size = new System.Drawing.Size(200, 20);
+            this.LabelErrorObjectivesRootFolder.Size = new System.Drawing.Size(306, 20);
             this.LabelErrorObjectivesRootFolder.TabIndex = 4;
             this.LabelErrorObjectivesRootFolder.Text = " ";
             this.LabelErrorObjectivesRootFolder.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -102,9 +102,9 @@
             // 
             this.LabelErrorArchiveFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelErrorArchiveFolder.ForeColor = System.Drawing.Color.Red;
-            this.LabelErrorArchiveFolder.Location = new System.Drawing.Point(227, 76);
+            this.LabelErrorArchiveFolder.Location = new System.Drawing.Point(332, 94);
             this.LabelErrorArchiveFolder.Name = "LabelErrorArchiveFolder";
-            this.LabelErrorArchiveFolder.Size = new System.Drawing.Size(152, 20);
+            this.LabelErrorArchiveFolder.Size = new System.Drawing.Size(234, 20);
             this.LabelErrorArchiveFolder.TabIndex = 8;
             this.LabelErrorArchiveFolder.Text = " ";
             this.LabelErrorArchiveFolder.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -112,7 +112,7 @@
             // ButtonArchiveFolder
             // 
             this.ButtonArchiveFolder.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ButtonArchiveFolder.Location = new System.Drawing.Point(385, 99);
+            this.ButtonArchiveFolder.Location = new System.Drawing.Point(539, 121);
             this.ButtonArchiveFolder.Name = "ButtonArchiveFolder";
             this.ButtonArchiveFolder.Size = new System.Drawing.Size(27, 27);
             this.ButtonArchiveFolder.TabIndex = 7;
@@ -124,9 +124,9 @@
             // 
             this.TextBoxArchiveFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.TextBoxArchiveFolder.ForeColor = System.Drawing.Color.White;
-            this.TextBoxArchiveFolder.Location = new System.Drawing.Point(16, 99);
+            this.TextBoxArchiveFolder.Location = new System.Drawing.Point(18, 116);
             this.TextBoxArchiveFolder.Name = "TextBoxArchiveFolder";
-            this.TextBoxArchiveFolder.Size = new System.Drawing.Size(363, 27);
+            this.TextBoxArchiveFolder.Size = new System.Drawing.Size(515, 37);
             this.TextBoxArchiveFolder.TabIndex = 6;
             this.TextBoxArchiveFolder.TabStop = false;
             this.TextBoxArchiveFolder.TextChanged += new System.EventHandler(this.TextBoxArchiveFolder_TextChanged);
@@ -134,9 +134,9 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 76);
+            this.label3.Location = new System.Drawing.Point(12, 83);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(209, 20);
+            this.label3.Size = new System.Drawing.Size(324, 31);
             this.label3.TabIndex = 5;
             this.label3.Text = "Objectives Archive Folder Path";
             // 
@@ -144,9 +144,9 @@
             // 
             this.LabelErrorAddinStorageFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LabelErrorAddinStorageFolder.ForeColor = System.Drawing.Color.Red;
-            this.LabelErrorAddinStorageFolder.Location = new System.Drawing.Point(227, 143);
+            this.LabelErrorAddinStorageFolder.Location = new System.Drawing.Point(302, 167);
             this.LabelErrorAddinStorageFolder.Name = "LabelErrorAddinStorageFolder";
-            this.LabelErrorAddinStorageFolder.Size = new System.Drawing.Size(152, 20);
+            this.LabelErrorAddinStorageFolder.Size = new System.Drawing.Size(264, 19);
             this.LabelErrorAddinStorageFolder.TabIndex = 12;
             this.LabelErrorAddinStorageFolder.Text = " ";
             this.LabelErrorAddinStorageFolder.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -154,7 +154,7 @@
             // ButtonAddinStorageFolder
             // 
             this.ButtonAddinStorageFolder.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.ButtonAddinStorageFolder.Location = new System.Drawing.Point(385, 166);
+            this.ButtonAddinStorageFolder.Location = new System.Drawing.Point(539, 199);
             this.ButtonAddinStorageFolder.Name = "ButtonAddinStorageFolder";
             this.ButtonAddinStorageFolder.Size = new System.Drawing.Size(27, 27);
             this.ButtonAddinStorageFolder.TabIndex = 11;
@@ -166,9 +166,9 @@
             // 
             this.TextBoxAddinStorageFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.TextBoxAddinStorageFolder.ForeColor = System.Drawing.Color.White;
-            this.TextBoxAddinStorageFolder.Location = new System.Drawing.Point(16, 166);
+            this.TextBoxAddinStorageFolder.Location = new System.Drawing.Point(18, 189);
             this.TextBoxAddinStorageFolder.Name = "TextBoxAddinStorageFolder";
-            this.TextBoxAddinStorageFolder.Size = new System.Drawing.Size(363, 27);
+            this.TextBoxAddinStorageFolder.Size = new System.Drawing.Size(515, 37);
             this.TextBoxAddinStorageFolder.TabIndex = 10;
             this.TextBoxAddinStorageFolder.TabStop = false;
             this.TextBoxAddinStorageFolder.TextChanged += new System.EventHandler(this.TextBoxAddinStorageFolder_TextChanged);
@@ -176,18 +176,18 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 143);
+            this.label4.Location = new System.Drawing.Point(12, 156);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(192, 20);
+            this.label4.Size = new System.Drawing.Size(296, 31);
             this.label4.TabIndex = 9;
             this.label4.Text = "Addin\'s Storage Folder Path";
             // 
             // FormSettings
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
-            this.ClientSize = new System.Drawing.Size(424, 279);
+            this.ClientSize = new System.Drawing.Size(587, 309);
             this.Controls.Add(this.LabelErrorAddinStorageFolder);
             this.Controls.Add(this.ButtonAddinStorageFolder);
             this.Controls.Add(this.TextBoxAddinStorageFolder);

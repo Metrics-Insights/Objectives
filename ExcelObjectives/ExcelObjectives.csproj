@@ -100,6 +100,7 @@
     <DocumentationFile>ObjectModel.xml</DocumentationFile>
     <DocumentationMarkdown>$(MSBuildProjectDirectory)\Docs\ObjectModel.md</DocumentationMarkdown>
     <VsxmdAutoDeleteXml>True</VsxmdAutoDeleteXml>
+    <NoWarn>CS1591;SA1101;SA1005;SA1201;SA1633;SA1210;SA1124;CS0649;CS0618;SA1600;SA1515;SA1202;SA1402;SA1025</NoWarn>
   </PropertyGroup>
   <!--
     This section defines properties that are set when the "Release" configuration is selected.
