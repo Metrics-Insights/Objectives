@@ -887,7 +887,7 @@
             </summary>
             <param name="json">JSON to be parsed.</param>
         </member>
-        <member name="M:OutlookObjectives.TaskDayReport.GetAppointmentsWithinRange(Microsoft.Office.Interop.Outlook.Folder,System.DateTime,System.DateTime)">
+        <member name="M:OutlookObjectives.TaskDayReport.GetAppointmentsWithinRange(Microsoft.Office.Interop.Outlook.MAPIFolder,System.DateTime,System.DateTime,System.Boolean,System.Boolean)">
             <summary>
             Get the appointments within the timespan.
             </summary>
@@ -896,7 +896,7 @@
             <param name="endTime">The finish time.</param>
             <returns>A collection of outlook items that match the filter.</returns>
         </member>
-        <member name="M:OutlookObjectives.TaskDayReport.GetAppointmentsInRange(Microsoft.Office.Interop.Outlook.Folder,System.DateTime,System.DateTime)">
+        <member name="M:OutlookObjectives.TaskDayReport.GetAppointmentsInRange(Microsoft.Office.Interop.Outlook.MAPIFolder,System.DateTime,System.DateTime,System.Boolean,System.Boolean)">
             <summary>
             Get the appointments that fall in the range of the timespan.
             </summary>

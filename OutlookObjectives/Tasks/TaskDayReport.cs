@@ -12,6 +12,7 @@
     using Serilog;
     using Newtonsoft.Json;
     using Outlook = Microsoft.Office.Interop.Outlook;
+    using System.Diagnostics;
 
     /// <summary>
     /// Day Report Task to generate Objectives Day Reports.
@@ -19,8 +20,8 @@
     public class TaskDayReport
     {
         // Get references to the Outlook Calendars.
-        private readonly Outlook.Folder calendar = Globals.ThisAddIn.Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).Folders["Objectives"] as Outlook.Folder;
-        private readonly Outlook.Folder system = Globals.ThisAddIn.Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderCalendar).Folders["System"] as Outlook.Folder;
+        private readonly Outlook.MAPIFolder calendar;
+        private readonly Outlook.MAPIFolder system;
 
         // Standardize the colors.
         private readonly Color colorUptime = Color.FromArgb(32, 32, 32);
@@ -40,6 +41,12 @@
         /// <param name="callBack">Callback for when the task has finished.</param>
         public TaskDayReport(Action callBack)
         {
+            //参考https://www.cnblogs.com/freeliver54/p/10801552.html
+            Outlook.NameSpace myNameSpace = new Outlook.Application().GetNamespace("mapi");
+
+            calendar = myNameSpace.GetDefaultFolder(Microsoft.Office.Interop.Outlook.OlDefaultFolders.olFolderCalendar);
+            system = myNameSpace.GetDefaultFolder(Microsoft.Office.Interop.Outlook.OlDefaultFolders.olFolderCalendar);
+
             this.callBack = callBack;
         }
 
@@ -108,7 +115,8 @@
                 keepLooking = false;
                 Outlook.Items billingItems = GetAppointmentsInRange(calendar, returnValue, returnValue.AddDays(1));
                 foreach (Outlook.AppointmentItem nextItem in billingItems)
-                {
+                { 
+                    Debug.WriteLine($"{nextItem.Categories}");
                     if (nextItem.Categories == "Objectives - Day Report")
                     {
                         returnValue = returnValue.AddDays(-1);
@@ -138,31 +146,31 @@
             DateTime finsh = day.AddHours(24);
             dayReport.Day = day;
 
-            // Find all the appointment items within the start and finish times from the System Calendar.
-            Outlook.Items appointments = GetAppointmentsWithinRange(system, start, finsh);
+            //// Find all the appointment items within the start and finish times from the System Calendar.
+            //Outlook.Items appointments = GetAppointmentsWithinRange(system, start, finsh);
 
-            // Process all the system appointments.
-            foreach (object appointment in appointments)
-            {
-                Outlook.AppointmentItem next = (Outlook.AppointmentItem)appointment;
-                switch (next.Categories)
-                {
-                    case "System - Uptime":
-                        ProcessSystemUptime(next.Body);
-                        break;
+            //// Process all the system appointments.
+            //foreach (object appointment in appointments)
+            //{
+            //    Outlook.AppointmentItem next = (Outlook.AppointmentItem)appointment;
+            //    switch (next.Categories)
+            //    {
+            //        case "System - Uptime":
+            //            ProcessSystemUptime(next.Body);
+            //            break;
 
-                    case "System - Idle":
-                        ProcessSystemIdle(next.Body);
-                        break;
+            //        case "System - Idle":
+            //            ProcessSystemIdle(next.Body);
+            //            break;
 
-                    default:
-                        Log.Information("Category : " + next.Categories);
-                        break;
-                }
-            }
+            //        default:
+            //            Log.Information("Category : " + next.Categories);
+            //            break;
+            //    }
+            //}
 
             // Find all the appointment items within the start and finish times from the Objectives Calendar.
-            appointments = GetAppointmentsWithinRange(calendar, start, finsh);
+            Outlook.Items appointments = GetAppointmentsWithinRange(calendar, start, finsh);
 
             // Process the appointments based on the application type.
             foreach (object appointment in appointments)
@@ -1094,19 +1102,38 @@
         /// <param name="startTime">The start time.</param>
         /// <param name="endTime">The finish time.</param>
         /// <returns>A collection of outlook items that match the filter.</returns>
-        private Outlook.Items GetAppointmentsWithinRange(Outlook.Folder folder, DateTime startTime, DateTime endTime)
+        private Outlook.Items GetAppointmentsWithinRange(Outlook.MAPIFolder folder, DateTime startTime, DateTime endTime, Boolean Allday = false, Boolean ExcludeCanceled=true)
         {
             string filter = "[Start] >= '"
                 + startTime.ToString("g")
                 + "' AND [End] <= '"
                 + endTime.ToString("g") + "'";
-
+            if (!Allday)
+            {
+                filter += " AND [AllDayEvent] = False ";
+            }
+            if (ExcludeCanceled)
+            {
+                //filter += " AND ([Subject] NOT STARTSWITH 'Canceled:') ";
+            }
             try
             {
                 Outlook.Items calItems = folder.Items;
                 calItems.IncludeRecurrences = true;
                 calItems.Sort("[Start]", Type.Missing);
                 Outlook.Items restrictItems = calItems.Restrict(filter);
+                foreach (object item in restrictItems)
+                {
+                    if (item is Outlook.AppointmentItem appointment)
+                    {
+                        //Outlook.AppointmentItem tItem = item as Outlook.AppointmentItem;
+                        Debug.WriteLine("Subject: " + appointment.Subject);
+                        Debug.WriteLine("Start: " + appointment.Start.ToString("f"));
+                        Debug.WriteLine("Body: " + appointment.Body);
+                        Debug.WriteLine(new string('-', 50)); // separator for readability
+                    }
+                }
+
                 if (restrictItems.Count > 0)
                 {
                     return restrictItems;
@@ -1129,19 +1156,35 @@
         /// <param name="startTime">The start time.</param>
         /// <param name="endTime">The finish time.</param>
         /// <returns>A collection of outlook items that match the filter.</returns>
-        private Outlook.Items GetAppointmentsInRange(Outlook.Folder folder, DateTime startTime, DateTime endTime)
+        private Outlook.Items GetAppointmentsInRange(Outlook.MAPIFolder folder, DateTime startTime, DateTime endTime, Boolean Allday = false, Boolean ExcludeCanceled = true)
         {
             string filter = "[Start] <= '"
                 + startTime.ToString("g")
                 + "' AND [End] >= '"
                 + endTime.ToString("g") + "'";
 
+            if (!Allday)
+            {
+                filter += " AND [AllDayEvent] = False ";
+            }
+            if (ExcludeCanceled)
+            {
+                //filter += " AND [Subject] STARTSWITH 'Canceled:' ";
+            }
             try
             {
                 Outlook.Items calItems = folder.Items;
                 calItems.IncludeRecurrences = true;
                 calItems.Sort("[Start]", Type.Missing);
                 Outlook.Items restrictItems = calItems.Restrict(filter);
+                foreach (object item in restrictItems)
+                {
+                    if (item is Outlook.AppointmentItem appointment)
+                    {
+                        Outlook.AppointmentItem tItem = item as Outlook.AppointmentItem;
+                        Debug.WriteLine(tItem.Subject + " -> " + tItem.Start.ToLongDateString());
+                    }
+                }
                 if (restrictItems.Count > 0)
                 {
                     return restrictItems;

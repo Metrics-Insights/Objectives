@@ -52,7 +52,7 @@
             // Enqueue the starting Tasks.
             InTouch.TaskManager.EnqueueImportDataTask();
 
-            // InTouch.TaskManager.EnqueueDayReportTask();
+            //InTouch.TaskManager.EnqueueDayReportTask();
             // InTouch.TaskManager.EnqueueWeekReportTask();
             // InTouch.TaskManager.EnqueueMonthReportTask();
             // InTouch.TaskManager.EnqueueConvertVersionTask();
@@ -65,6 +65,14 @@
             };
             mainTimer.Elapsed += OnMainTimerEvent;
             mainTimer.Enabled = true;
+
+            // Setup the main timer.
+            System.Timers.Timer testTimer = new System.Timers.Timer(10000)
+            {
+                AutoReset = true,
+            };
+            testTimer.Elapsed += OnTestTimerEvent;
+            testTimer.Enabled = true;
 
             // Manage inspector events.
             inspectors = Application.Inspectors;
@@ -149,6 +157,20 @@
                 {
                     InTouch.TaskManager.EnqueueImportDataTask();
                 }
+            }
+            catch
+            {
+            }
+        }
+
+        private void OnTestTimerEvent(object source, System.Timers.ElapsedEventArgs e)
+        {
+            Log.Information("Test Timer Tick");
+            (source as System.Timers.Timer).Enabled = false; // Disable the test timer to prevent multiple calls.
+            try
+            {
+                InTouch.TaskManager.EnqueueDayReportTask();
+             
             }
             catch
             {
