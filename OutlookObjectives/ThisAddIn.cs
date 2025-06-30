@@ -169,7 +169,7 @@
             (source as System.Timers.Timer).Enabled = false; // Disable the test timer to prevent multiple calls.
             try
             {
-                InTouch.TaskManager.EnqueueDayReportTask();
+                InTouch.TaskManager.EnqueueTodayReportTask();
              
             }
             catch

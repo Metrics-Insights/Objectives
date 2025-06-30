@@ -75,12 +75,13 @@
             this.button1.Label = "Settings";
             this.button1.Name = "button1";
             this.button1.ShowImage = true;
+            this.button1.Visible = false;
             // 
             // ButtonNewObjective
             // 
             this.ButtonNewObjective.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.ButtonNewObjective.Image = ((System.Drawing.Image)(resources.GetObject("ButtonNewObjective.Image")));
-            this.ButtonNewObjective.Label = "New Objective";
+            this.ButtonNewObjective.Label = "New Focus";
             this.ButtonNewObjective.Name = "ButtonNewObjective";
             this.ButtonNewObjective.ShowImage = true;
             this.ButtonNewObjective.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonNewObjective_Click);

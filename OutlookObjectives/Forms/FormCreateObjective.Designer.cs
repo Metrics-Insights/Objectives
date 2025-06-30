@@ -40,7 +40,7 @@
             this.TextBoxObjective.ForeColor = System.Drawing.Color.White;
             this.TextBoxObjective.Location = new System.Drawing.Point(12, 12);
             this.TextBoxObjective.Name = "TextBoxObjective";
-            this.TextBoxObjective.Size = new System.Drawing.Size(402, 27);
+            this.TextBoxObjective.Size = new System.Drawing.Size(402, 47);
             this.TextBoxObjective.TabIndex = 0;
             // 
             // ButtonCreateObjective
@@ -49,7 +49,7 @@
             this.ButtonCreateObjective.ForeColor = System.Drawing.Color.White;
             this.ButtonCreateObjective.Location = new System.Drawing.Point(420, 12);
             this.ButtonCreateObjective.Name = "ButtonCreateObjective";
-            this.ButtonCreateObjective.Size = new System.Drawing.Size(142, 28);
+            this.ButtonCreateObjective.Size = new System.Drawing.Size(153, 47);
             this.ButtonCreateObjective.TabIndex = 1;
             this.ButtonCreateObjective.Text = "Create Objective";
             this.ButtonCreateObjective.UseVisualStyleBackColor = true;
@@ -57,10 +57,10 @@
             // 
             // FormCreateObjective
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 41F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
-            this.ClientSize = new System.Drawing.Size(573, 51);
+            this.ClientSize = new System.Drawing.Size(597, 88);
             this.Controls.Add(this.ButtonCreateObjective);
             this.Controls.Add(this.TextBoxObjective);
             this.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

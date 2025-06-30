@@ -1,24 +1,31 @@
 ﻿namespace OutlookObjectives
 {
     using CommonObjectives;
+    using Microsoft.Office.Interop.Outlook;
     using Newtonsoft.Json;
     using Serilog;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Drawing2D;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms.DataVisualization.Charting;
+    using static System.Net.Mime.MediaTypeNames;
+    using Action = System.Action;
     using Outlook = Microsoft.Office.Interop.Outlook;
 
     /// <summary>
     /// Day Report Task to generate Objectives Day Reports.
     /// </summary>
-    public class TaskDayReport
+    public class TaskTodayReport
     {
         // Get references to the Outlook Calendars.
         private readonly Outlook.MAPIFolder calendar;
@@ -36,11 +43,11 @@
         private DateTime day;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskDayReport"/> class.
+        /// Initializes a new instance of the <see cref="TaskTodayReport"/> class.
         /// Returns control back to the TaskManager.
         /// </summary>
         /// <param name="callBack">Callback for when the task has finished.</param>
-        public TaskDayReport(Action callBack)
+        public TaskTodayReport(Action callBack)
         {
             //参考https://www.cnblogs.com/freeliver54/p/10801552.html
             Outlook.NameSpace myNameSpace = new Outlook.Application().GetNamespace("mapi");
@@ -58,7 +65,7 @@
         {
             Thread backgroundThread = new Thread(new ThreadStart(BackgroundProcess))
             {
-                Name = "Objectives.TaskDayReport",
+                Name = "Objectives.TaskTodayReport",
                 IsBackground = true,
                 Priority = ThreadPriority.Normal,
             };
@@ -90,7 +97,6 @@
                 DrawApplicationsImage();
                 DrawDayBarImage();
                 CreateHTML();
-                CreateAppointment();
             }
             else
             {
@@ -106,7 +112,7 @@
         /// <returns>A date time of the day found.</returns>
         private DateTime FindDay()
         {
-            DateTime returnValue = DateTime.Parse(DateTime.Now.Subtract(new TimeSpan(1, 0, 0, 0, 0)).ToString(@"yyyy-MM-dd 00:00"));
+            DateTime returnValue = DateTime.Parse(DateTime.Now.Subtract(new TimeSpan(0, 0, 0, 0, 0)).ToString(@"yyyy-MM-dd 00:00"));
 
             bool keepLooking = true;
             int totalDays = 0;
@@ -144,31 +150,8 @@
         {
             // DateTimes for start and finish of the day.
             DateTime start = day;
-            DateTime finsh = day.AddHours(24);
+            DateTime finsh = day.AddHours(24*7); // in one week
             dayReport.Day = day;
-
-            //// Find all the appointment items within the start and finish times from the System Calendar.
-            //Outlook.Items appointments = GetAppointmentsWithinRange(system, start, finsh);
-
-            //// Process all the system appointments.
-            //foreach (object appointment in appointments)
-            //{
-            //    Outlook.AppointmentItem next = (Outlook.AppointmentItem)appointment;
-            //    switch (next.Categories)
-            //    {
-            //        case "System - Uptime":
-            //            ProcessSystemUptime(next.Body);
-            //            break;
-
-            //        case "System - Idle":
-            //            ProcessSystemIdle(next.Body);
-            //            break;
-
-            //        default:
-            //            Log.Information("Category : " + next.Categories);
-            //            break;
-            //    }
-            //}
 
             // Find all the appointment items within the start and finish times from the Objectives Calendar.
             Outlook.Items appointments = GetAppointmentsWithinRange(calendar, start, finsh);
@@ -1122,38 +1105,124 @@
                 Outlook.Items calItems = folder.Items;
                 calItems.IncludeRecurrences = true;
                 calItems.Sort("[Start]", Type.Missing);
+                string datestr = startTime.Date.ToString("yyyyMMdd", CultureInfo.CurrentCulture);
+                string outputDir = Path.Combine(
+                    InTouch.ObjectivesRootFolder, "Calendar", $"{datestr}");
+                Directory.CreateDirectory(outputDir);
 
                 Outlook.Items restrictItems = calItems.Restrict(filter);
                 foreach (object item in restrictItems)
                 {
                     if (item is Outlook.AppointmentItem appointment)
                     {
-                        Debug.WriteLine("Subject: " + appointment.Subject);
-                        Debug.WriteLine("Start: " + appointment.Start.ToString("f"));
-                        Debug.WriteLine("Body: " + appointment.Body);
+                        string safeSubject = string.Join("_", appointment.Subject.Split(Path.GetInvalidFileNameChars()));
+                        string fileName = $"{appointment.Start:yyyyMMdd_HHmm}-{safeSubject}.txt";
+                        string appointmentPath = Path.Combine(outputDir, fileName);
+                        string attachmentDir = Path.Combine(outputDir, $"{appointment.Start:yyyyMMdd_HHmm}-{safeSubject}_Attachments");
+
+                        if (!File.Exists(appointmentPath))
+                        {
+                            using (StreamWriter writer = new StreamWriter(appointmentPath))
+                            {
+                                writer.WriteLine(
+                                    "This is an guide information to the meeting content, which may have the key information like\n" +
+                                    "1. Meeting Details\n" +
+                                    "- Title: [Insert Meeting Title]\n" +
+                                    "- Date: [MM/DD/YYYY]\n" +
+                                    "- Time: [Start – End, with timezone if relevant]\n" +
+                                    "- Attendees: [List of participants]\n" +
+                                    "2. Purpose of the Meeting\n" +
+                                    "Brief one-sentence summary of why the meeting was held.\n" +
+                                    "Example: \"To review the current MCP server configuration and decide on next steps for integration testing.\"\n" +
+                                    "3. Key Discussion Points\n" +
+                                    "Use bullet points for clarity.\n" +
+                                    "- Topic 1: [Brief description of the issue or item discussed]\n" +
+                                    "- Topic 2: [Any technical challenges or strategic decisions made]\n" +
+                                    "- Topic 3: [Updates, blockers, or feedback from stakeholders]\n" +
+                                    "4. Decisions Made\n" +
+                                    "Highlight agreements and resolutions.\n" +
+                                    "- Decision 1: [What was agreed upon and by whom]\n" +
+                                    "- Decision 2: [Actions or changes confirmed]\n" +
+                                    "5. Action Items\n" +
+                                    "Assign clear responsibilities and deadlines.\n" +
+                                    "| Task | Responsible | Due Date | |------|-------------|----------| | [Describe action] | [Name]    | [MM/DD]   | | [Another action]  | [Name]    | [MM/DD]   |\n" +
+                                    "6. Follow-Up / Next Steps\n" +
+                                    "- Date of next meeting (if scheduled)\n" +
+                                    "- Items requiring further clarification or investigation\n" +
+                                    "- Any shared resources (e.g., shared slides, diagrams, code snippets)\n" +
+                                    "__________________________________________\n" +
+                                    "The following is the meeting content. \n"
+                                    );
+                                writer.WriteLine("Subject: " + appointment.Subject);
+                                writer.WriteLine("Start: " + appointment.Start.ToString("f"));
+                                writer.WriteLine("Duration: " + appointment.Duration + " minutes");
+                                writer.WriteLine("Organizer: " + appointment.Organizer);
+
+                                writer.WriteLine("Recipients:");
+                                foreach (Outlook.Recipient recipient in appointment.Recipients)
+                                {
+                                    writer.WriteLine($" - {recipient.Name} ({recipient.Address})");
+                                }
+
+                                if (appointment.Attachments.Count > 0)
+                                {
+                                    writer.WriteLine("Find the Attachments here: " + attachmentDir);
+                                }
+
+                                writer.WriteLine("\nBody:\n" + appointment.Body);
+
+                            }
+
+                            //appointment.SaveAs(appointmentPath, Outlook.OlSaveAsType.olICal);
+                        }
 
                         if (appointment.Attachments.Count > 0)
                         {
-                            Debug.WriteLine("Attachments:");
-                            for (int i = 1; i <= appointment.Attachments.Count; i++) // 1-based index
+                            Directory.CreateDirectory(attachmentDir);
+
+                            for (int i = 1; i <= appointment.Attachments.Count; i++)
                             {
                                 Outlook.Attachment attachment = appointment.Attachments[i];
-                                string tempPath = Path.Combine(Path.GetTempPath(), attachment.FileName);
-                                //attachment.SaveAsFile(tempPath);
-                                Debug.WriteLine($" - {attachment.FileName} saved to {tempPath}");
-
-                                // Optional: Read file content (example for text files)
-                                if (Path.GetExtension(tempPath).Equals(".txt", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    string content = File.ReadAllText(tempPath);
-                                    Debug.WriteLine("   Content: " + content);
-                                }
+                                string attachmentPath = Path.Combine(attachmentDir, attachment.FileName);
+                                attachment.SaveAsFile(attachmentPath);
                             }
                         }
 
-                        Debug.WriteLine(new string('-', 50)); // separator for readability
+                        Debug.WriteLine($"Saved appointment to {appointmentPath}");
                     }
                 }
+
+                //Outlook.Items restrictItems = calItems.Restrict(filter);
+                //foreach (object item in restrictItems)
+                //{
+                //    if (item is Outlook.AppointmentItem appointment)
+                //    {
+                //        Debug.WriteLine("Subject: " + appointment.Subject);
+                //        Debug.WriteLine("Start: " + appointment.Start.ToString("f"));
+                //        Debug.WriteLine("Body: " + appointment.Body);
+
+                //        if (appointment.Attachments.Count > 0)
+                //        {
+                //            Debug.WriteLine("Attachments:");
+                //            for (int i = 1; i <= appointment.Attachments.Count; i++) // 1-based index
+                //            {
+                //                Outlook.Attachment attachment = appointment.Attachments[i];
+                //                string tempPath = Path.Combine(Path.GetTempPath(), attachment.FileName);
+                //                //attachment.SaveAsFile(tempPath);
+                //                Debug.WriteLine($" - {attachment.FileName} saved to {tempPath}");
+
+                //                // Optional: Read file content (example for text files)
+                //                if (Path.GetExtension(tempPath).Equals(".txt", StringComparison.OrdinalIgnoreCase))
+                //                {
+                //                    string content = File.ReadAllText(tempPath);
+                //                    Debug.WriteLine("   Content: " + content);
+                //                }
+                //            }
+                //        }
+
+                //        Debug.WriteLine(new string('-', 50)); // separator for readability
+                //    }
+                //}
 
                 if (restrictItems.Count > 0)
                 {

@@ -28,7 +28,7 @@
             explorer.FolderSwitch += Explorer_FolderSwitch;
 
             // Create the Objectives task pane for the side of the calendar.
-            taskPaneObjectives = Globals.ThisAddIn.CustomTaskPanes.Add(new UCObjectives(), "Objectives", explorer);
+            taskPaneObjectives = Globals.ThisAddIn.CustomTaskPanes.Add(new UCObjectives(), "Personal Agent", explorer);
             taskPaneObjectives.DockPosition = Microsoft.Office.Core.MsoCTPDockPosition.msoCTPDockPositionRight;
             taskPaneObjectives.Width = (int)(250 * InTouch.DpiX);
             taskPaneObjectives.Visible = true;

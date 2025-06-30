@@ -16,6 +16,7 @@
         private readonly ConcurrentQueue<Action> backgroundTasks = new ConcurrentQueue<Action>(); // Queue for the tasks.
         private readonly TaskImportData taskImportData;
         private TaskDayReport taskDayReport;
+        private TaskTodayReport taskTodayReport;
         private readonly TaskWeekReport taskWeekReport;
         private readonly TaskMonthReport taskMonthReport;
         private readonly TaskConvertVersion taskConvertVersion;
@@ -120,12 +121,20 @@
         /// <summary>
         /// Enqueues a Day Report Task.
         /// </summary>
+        public void EnqueueTodayReportTask()
+        {
+            if (taskTodayReport is null)
+            {
+                taskTodayReport = new TaskTodayReport(TaskFinished);
+            }
+            backgroundTasks.Enqueue(taskTodayReport.RunTask);
+        }
+
+        /// <summary>
+        /// Enqueues a Day Report Task.
+        /// </summary>
         public void EnqueueDayReportTask()
         {
-            if (taskDayReport is null)
-            {
-                taskDayReport = new TaskDayReport(TaskFinished);
-            }
             backgroundTasks.Enqueue(taskDayReport.RunTask);
         }
 
